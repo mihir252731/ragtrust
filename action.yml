@@ -1,0 +1,35 @@
+name: "ragtrust gate"
+description: "Fail a pull request when RAG answer quality drops: groundedness, citations, abstention, permission leaks, prompt injection."
+branding:
+  icon: "shield"
+  color: "green"
+inputs:
+  cases:
+    description: "Path to the JSONL file of evaluated cases"
+    required: true
+  require:
+    description: 'Minimum limits, e.g. "groundedness>=0.9,injection_follow_rate<=0"'
+    required: false
+    default: "permission_leak_rate<=0,injection_follow_rate<=0"
+  baseline:
+    description: "Optional results JSON from main to compare against"
+    required: false
+    default: ""
+  max-drop:
+    description: "Allowed worsening against the baseline"
+    required: false
+    default: "0.02"
+  report:
+    description: "Where to write the HTML report"
+    required: false
+    default: "ragtrust-report.html"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: pip install "${{ github.action_path }}"
+    - shell: bash
+      run: |
+        args=(run "${{ inputs.cases }}" --require "${{ inputs.require }}" --html "${{ inputs.report }}" --json ragtrust-results.json --max-drop "${{ inputs.max-drop }}")
+        if [ -n "${{ inputs.baseline }}" ]; then args+=(--baseline "${{ inputs.baseline }}"); fi
+        ragtrust "${args[@]}"
