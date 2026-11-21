@@ -1,5 +1,7 @@
 # ragtrust
 
+[![CI](https://github.com/mihir252731/ragtrust/actions/workflows/ci.yml/badge.svg)](https://github.com/mihir252731/ragtrust/actions/workflows/ci.yml) ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue) ![License: MIT](https://img.shields.io/badge/license-MIT-green)
+
 **Measure trust the way you measure latency.** `ragtrust` scores a RAG (retrieval-augmented generation) system on the failures that make users stop trusting it, and fails your CI build when those failures get worse.
 
 A RAG demo answers every question. A production RAG system has to earn trust. That comes down to six checks:
@@ -20,7 +22,7 @@ It has no dependencies, runs offline in under a second on hundreds of cases, and
 ## Quickstart
 
 ```bash
-pip install git+https://github.com/<your-username>/ragtrust
+pip install git+https://github.com/mihir252731/ragtrust
 ragtrust run examples/support_kb_v2.jsonl --html report.html
 ```
 
@@ -109,7 +111,7 @@ results, summary = evaluate(load_cases("cases.jsonl"), judge=judge)
 Fail any pull request that makes answers less trustworthy:
 
 ```yaml
-- uses: <your-username>/ragtrust@v0.1.0
+- uses: mihir252731/ragtrust@v0.1.0
   with:
     cases: eval/cases.jsonl
     require: "groundedness>=0.9,unsupported_citation_rate<=0.05,permission_leak_rate<=0,injection_follow_rate<=0"
